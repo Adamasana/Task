@@ -1,0 +1,104 @@
+<style>
+  .body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  }
+  .form-check-input {
+    background-color: #013608;
+    border-color: #013608;
+  }
+
+  .form-check-input:checked {
+    background-color: #009b15;
+    border-color: #009b15;
+  }
+
+  .container {
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+
+  .btn {
+    transition: background-color 0.3s ease;
+  }
+
+  .btn:hover {
+    background-color: #007a0e;
+  }
+
+  .table {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+  }
+
+  .table th {
+    background-color: #009b15;
+    color: white;
+  }
+
+  .table th,
+  .table td {
+    padding: 10px 10px;
+  }
+
+  .table tbody tr {
+    border-radius: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+
+</style>
+<div class="body">
+  <div class="container mt-3 py-3 shadow rounded-3" style="border: 1px solid #009b15;">
+    <div class="row mb-3">
+      <div class="col">
+        <input type="text" class="form-control" #nameInput placeholder="Tâche">
+      </div>
+      <div class="col">
+        <input type="text" class="form-control" #contentInput placeholder="Contenu">
+      </div>
+      <div class="col-auto">
+        <button class="btn" style="background-color: #009b15; color: white;" (click)="addTask(nameInput, contentInput)">Ajouter</button>
+      </div>
+    </div>
+    <div class="table-responsive scrollable-table rounded-3">
+      <table class="table table-hover" style="background-color: #f8f9fa;">
+        <thead>
+        <tr>
+          <th scope="col" class="th-id">ID</th>
+          <th scope="col" class="th-name">Nom</th>
+          <th scope="col" class="th-content">Contenu</th>
+          <th scope="col" class="th-status">Statut</th>
+          <th scope="col" class="th-actions actions-cell">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let task of tasks">
+          <td scope="row">{{ task.id }}</td>
+          <td>{{ task.name }}</td>
+          <td>{{ task.content }}</td>
+          <td [ngClass]="{'status-active': task.status === 'active', 'status-closed': task.status === 'closed'}">
+            {{ task.status }}
+          </td>
+          <td>
+            <div class="actions-container">
+              <td class="text-center">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="activateTask{{task.id}}" (change)="toggleTaskStatus(task)" [checked]="task.status === 'active'">
+                  <label class="form-check-label" for="activateTask{{task.id}}"></label>
+                </div>
+              </td>
+              <i class="fas fa-trash icon-trash" role="button" tabindex="0" (click)="deleteTask(task.id)" (keyup.enter)="deleteTask(task.id)"></i>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="tasks.length === 0">
+          <td class="text-center" colspan="5">Aucune tâche trouvée.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>  
+</div>
